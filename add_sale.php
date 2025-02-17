@@ -1,87 +1,93 @@
 <?php
   $page_title = 'Add Sale';
   require_once('includes/load.php');
-  // Checkin What level user has permission to view this page
-   page_require_level(3);
-?>
-<?php
+  page_require_level(3);
 
   if(isset($_POST['add_sale'])){
-    $req_fields = array('s_id','quantity','price','total', 'date' );
+    $req_fields = array('s_id','quantity','price','total', 'date');
     validate_fields($req_fields);
-        if(empty($errors)){
-          $p_id      = $db->escape((int)$_POST['s_id']);
-          $s_qty     = $db->escape((int)$_POST['quantity']);
-          $s_total   = $db->escape($_POST['total']);
-          $date      = $db->escape($_POST['date']);
-          $s_date    = make_date();
+    if(empty($errors)){
+      $p_id    = $db->escape((int)$_POST['s_id']);
+      $s_qty   = $db->escape((int)$_POST['quantity']);
+      $s_total = $db->escape($_POST['total']);
+      $date    = $db->escape($_POST['date']);
+      $s_date  = make_date();
 
-          $sql  = "INSERT INTO sales (";
-          $sql .= " product_id,qty,price,date";
-          $sql .= ") VALUES (";
-          $sql .= "'{$p_id}','{$s_qty}','{$s_total}','{$s_date}'";
-          $sql .= ")";
+      $sql  = "INSERT INTO sales (product_id, qty, price, date) VALUES ('{$p_id}', '{$s_qty}', '{$s_total}', '{$s_date}')";
 
-                if($db->query($sql)){
-                  update_product_qty($s_qty,$p_id);
-                  $session->msg('s',"Sale added. ");
-                  redirect('add_sale.php', false);
-                } else {
-                  $session->msg('d',' Sorry failed to add!');
-                  redirect('add_sale.php', false);
-                }
-        } else {
-           $session->msg("d", $errors);
-           redirect('add_sale.php',false);
-        }
+      if($db->query($sql)){
+        update_product_qty($s_qty, $p_id);
+        $session->msg('s', "Sale added.");
+        redirect('add_sale.php', false);
+      } else {
+        $session->msg('d', 'Sorry, failed to add!');
+        redirect('add_sale.php', false);
+      }
+    } else {
+      $session->msg("d", $errors);
+      redirect('add_sale.php', false);
+    }
   }
-
 ?>
-<?php include_once('layouts/header.php'); ?>
-<div class="row">
-  <div class="col-md-6">
-    <?php echo display_msg($msg); ?>
-    <form method="post" action="ajax.php" autocomplete="off" id="sug-form">
-        <div class="form-group">
-          <div class="input-group">
-            <span class="input-group-btn">
-              <button type="submit" class="btn btn-primary">Find It</button>
-            </span>
-            <input type="text" id="sug_input" class="form-control" name="title"  placeholder="Search for product name">
-         </div>
-         <div id="result" class="list-group"></div>
-        </div>
-    </form>
-  </div>
-</div>
-<div class="row">
 
-  <div class="col-md-12">
-    <div class="panel panel-default">
-      <div class="panel-heading clearfix">
-        <strong>
-          <span class="glyphicon glyphicon-th"></span>
-          <span>Sale Eidt</span>
-       </strong>
+<?php include_once('layouts/header.php'); ?>
+
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-8">
+      <h3 class="mb-3">Choose Menu</h3>
+      <div class="row">
+        <?php 
+          $products = find_all('products'); // Fetch products from database
+          foreach ($products as $product): 
+        ?>
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <img class="card-img-top" src="uploads/products/<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>">
+            <div class="card-body">
+              <h5 class="card-title"><?php echo $product['name']; ?></h5>
+              <p class="card-text">$<?php echo number_format($product['price'], 2); ?></p>
+              <button class="btn btn-primary add-to-bill" 
+                      data-id="<?php echo $product['id']; ?>" 
+                      data-name="<?php echo $product['name']; ?>" 
+                      data-price="<?php echo $product['price']; ?>">
+                Add to Bill
+              </button>
+            </div>
+          </div>
+        </div>
+        <?php endforeach; ?>
       </div>
-      <div class="panel-body">
-        <form method="post" action="add_sale.php">
-         <table class="table table-bordered">
-           <thead>
-            <th> Item </th>
-            <th> Price </th>
-            <th> Qty </th>
-            <th> Total </th>
-            <th> Date</th>
-            <th> Action</th>
-           </thead>
-             <tbody  id="product_info"> </tbody>
-         </table>
-       </form>
+    </div>
+
+    <div class="col-md-4">
+      <h3 class="mb-3">Bill</h3>
+      <div class="card">
+        <div class="card-body">
+          <ul id="bill-items" class="list-group mb-3"></ul>
+          <h5>Total: $<span id="total-price">0.00</span></h5>
+          <button class="btn btn-success btn-block">Checkout</button>
+        </div>
       </div>
     </div>
   </div>
-
 </div>
+
+<script>
+  let total = 0;
+  document.querySelectorAll('.add-to-bill').forEach(button => {
+    button.addEventListener('click', function() {
+      const name = this.getAttribute('data-name');
+      const price = parseFloat(this.getAttribute('data-price'));
+      total += price;
+      document.getElementById('total-price').innerText = total.toFixed(2);
+      
+      let billItem = document.createElement('li');
+      billItem.className = 'list-group-item';
+      billItem.innerText = name + " - $" + price.toFixed(2);
+      document.getElementById('bill-items').appendChild(billItem);
+    });
+  });
+</script>
 
 <?php include_once('layouts/footer.php'); ?>
