@@ -3,32 +3,25 @@
   require_once('includes/load.php');
   page_require_level(3);
 
-  function add_to_cart($product_id, $quantity) {
-    // Add logic to add item to cart
-  }
+  if(isset($_POST['checkout'])){
+    if(!empty($_POST['bill_data'])){
+      $bill_data = json_decode($_POST['bill_data'], true);
+      $sale_date = make_date();
 
-  if(isset($_POST['add_sale'])){
-    $req_fields = array('s_id','quantity','price','total', 'date');
-    validate_fields($req_fields);
-    if(empty($errors)){
-      $p_id    = $db->escape((int)$_POST['s_id']);
-      $s_qty   = $db->escape((int)$_POST['quantity']);
-      $s_total = $db->escape($_POST['total']);
-      $date    = $db->escape($_POST['date']);
-      $s_date  = make_date();
-
-      $sql  = "INSERT INTO sales (product_id, qty, price, date) VALUES ('{$p_id}', '{$s_qty}', '{$s_total}', '{$s_date}')";
-
-      if($db->query($sql)){
+      foreach ($bill_data as $item) {
+        $p_id = $db->escape((int)$item['id']);
+        $s_price = $db->escape($item['price']);
+        $s_qty = 1; // Default quantity = 1
+        $sql = "INSERT INTO sales (product_id, qty, price, date) 
+                VALUES ('{$p_id}', '{$s_qty}', '{$s_price}', '{$sale_date}')";
+        $db->query($sql);
         update_product_qty($s_qty, $p_id);
-        $session->msg('s', "Sale added.");
-        redirect('add_sale.php', false);
-      } else {
-        $session->msg('d', 'Sorry, failed to add!');
-        redirect('add_sale.php', false);
       }
+
+      $session->msg('s', "Sale successfully added!");
+      redirect('add_sale.php', false);
     } else {
-      $session->msg("d", $errors);
+      $session->msg('d', "No items in the bill!");
       redirect('add_sale.php', false);
     }
   }
@@ -68,9 +61,12 @@
       <h3 class="mb-3">Bill</h3>
       <div class="card">
         <div class="card-body">
-          <ul id="bill-items" class="list-group mb-3"></ul>
-          <h5>Total: $<span id="total-price">0.00</span></h5>
-          <button class="btn btn-success btn-block">Checkout</button>
+          <form method="post" action="add_sale.php">
+            <ul id="bill-items" class="list-group mb-3"></ul>
+            <input type="hidden" name="bill_data" id="bill-data">
+            <h5>Total: $<span id="total-price">0.00</span></h5>
+            <button type="submit" name="checkout" class="btn btn-success btn-block">Checkout</button>
+          </form>
         </div>
       </div>
     </div>
@@ -79,17 +75,24 @@
 
 <script>
   let total = 0;
+  let bill = [];
+
   document.querySelectorAll('.add-to-bill').forEach(button => {
     button.addEventListener('click', function() {
+      const id = this.getAttribute('data-id');
       const name = this.getAttribute('data-name');
       const price = parseFloat(this.getAttribute('data-price'));
+
       total += price;
       document.getElementById('total-price').innerText = total.toFixed(2);
-      
+
       let billItem = document.createElement('li');
       billItem.className = 'list-group-item';
       billItem.innerText = name + " - $" + price.toFixed(2);
       document.getElementById('bill-items').appendChild(billItem);
+
+      bill.push({ id, name, price });
+      document.getElementById('bill-data').value = JSON.stringify(bill);
     });
   });
 </script>
