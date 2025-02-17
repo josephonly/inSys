@@ -1,0 +1,122 @@
+/* Background Styling */
+@import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
+
+body {
+    background: url('../../assets/bg.jpg') no-repeat center center fixed; 
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Animated Gradient Background */
+
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; filter: brightness(0.9); }  /* Slightly darker */
+    50% { background-position: 100% 50%; filter: brightness(1.1); } /* Slightly lighter */
+    100% { background-position: 0% 50%; filter: brightness(0.9); }  /* Slightly darker */
+}
+
+/* Login Container */
+.login-container {
+    background: linear-gradient(135deg, #0a418f, #0d6def, #3c8efc);
+    background-size: 350% 350%;  /* Adjusted for smoother flow */
+    animation: gradientFlow 5s ease-in-out infinite;  /* Slowed down slightly */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);  /* Softer shadow */
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    color: white;
+}
+
+
+
+
+/* Header Styling */
+.login-container h1 {
+    font-size: 25px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #fff;
+    font-family: 'Bungee', sans-serif;
+}
+
+/* Form Styling */
+.form-control {
+    border-radius: 8px;
+    border: none;
+    padding: 10px;
+}
+
+/* Login Button */
+.btn-login {
+    width: 100%;
+    background: white;
+    color: #0d6def; /* Matches the gradient */
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    font-weight: bold;
+   
+    transition: 0.3s ease-in-out;
+}
+
+.btn-login:hover {
+    background: #e3f0ff; /* Light blue shade */
+    color: #0b5ed7;
+}
+
+
+
+/* Logo Styling */
+.login-logo {
+    width: 200px; /* Adjust size as needed */
+    height: auto;
+    margin-bottom: 15px;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+/* Smooth Fade-In Animation */
+@keyframes fadeIn {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* Form Label Styling */
+.form-label {
+    font-size: 16px;  /* Adjust size */
+    font-weight: 600;  /* Semi-bold */
+    color: #fff;  /* White to match the theme */
+    font-family: 'Bungee', sans-serif;  /* Use the recommended font */
+    text-transform: uppercase;  /* Optional: Makes it stand out */
+    display: block;  /* Ensures labels take full width */
+    text-align: left;  /* Aligns text to the left */
+    margin-bottom: 5px;  /* Adds space below label */
+}
+
+/* Align Form Inputs */
+.form-control {
+    width: 100%;  /* Keeps input full width */
+    text-align: left;  /* Ensures text inside the input is aligned */
+}
+/* Form Label Styling */
+.form-label {
+    font-size: 12px;  /* Adjust size */
+    font-weight: 100;  /* Semi-bold */
+    color: #fff;  /* White to match the theme */
+    font-family: 'Bungee', sans-serif;  /* Use the recommended font */
+    text-transform: uppercase;  /* Optional: Makes it stand out */
+    display: block;  /* Ensures labels take full width */
+    text-align: left;  /* Aligns text to the left */
+    margin-bottom: 5px;  /* Adds space below label */
+}
+
+/* Align Form Inputs */
+.form-control {
+    width: 100%;  /* Keeps input full width */
+    text-align: left;  /* Ensures text inside the input is aligned */
+}
+
