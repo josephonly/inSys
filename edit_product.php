@@ -66,7 +66,7 @@ if(!$product){
         </div>
         <div class="panel-body">
          <div class="col-md-7">
-           <form method="post" action="edit_product.php?id=<?php echo (int)$product['id'] ?>" enctype="multipart/form-data">
+           <form method="post" action="edit_product.php?id=<?php echo (int)$product['id'] ?>">
               <div class="form-group">
                 <div class="input-group">
                   <span class="input-group-addon">
@@ -136,10 +136,6 @@ if(!$product){
                    </div>
                   </div>
                </div>
-              </div>
-              <div class="form-group">
-                <label for="product-image">Upload Image</label>
-                <input type="file" class="form-control" name="product-image">
               </div>
               <button type="submit" name="product" class="btn btn-danger">Update</button>
           </form>
