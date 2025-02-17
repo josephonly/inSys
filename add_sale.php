@@ -109,6 +109,26 @@
       }
     });
   });
+
+  document.getElementById('product-list').addEventListener('click', function(event) {
+    if (event.target.classList.contains('add-to-bill')) {
+      const button = event.target;
+      const id = button.getAttribute('data-id');
+      const name = button.getAttribute('data-name');
+      const price = parseFloat(button.getAttribute('data-price'));
+
+      total += price;
+      document.getElementById('total-price').innerText = total.toFixed(2);
+
+      let billItem = document.createElement('li');
+      billItem.className = 'list-group-item';
+      billItem.innerText = name + " - $" + price.toFixed(2);
+      document.getElementById('bill-items').appendChild(billItem);
+
+      bill.push({ id, name, price });
+      document.getElementById('bill-data').value = JSON.stringify(bill);
+    }
+  });
 </script>
 
 <?php include_once('layouts/footer.php'); ?>
