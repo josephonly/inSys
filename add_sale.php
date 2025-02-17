@@ -9,7 +9,7 @@ $products = find_all('products');
 <?php include_once('layouts/header.php'); ?>
 
 <!-- Link to the external CSS file -->
-<link rel="stylesheet" href="libs/css/add_sale.css">
+<link rel="stylesheet" href="css/add_sale.css">
 
 <div class="container mt-4">
     <div class="row">
@@ -24,12 +24,7 @@ $products = find_all('products');
                     ?>
                     <div class="col-md-4">
                         <div class="card mb-4">
-<<<<<<< HEAD
                             <img class="card-img-top" src="<?php echo $image_path; ?>" alt="<?php echo $product['name']; ?>">
-=======
-                        <img class="card-img-top" src="uploads/products/<?php echo !empty($product['image']) ? $product['image'] : 'default.png'; ?>" alt="<?php echo $product['name']; ?>">
-
->>>>>>> 46f43ddc261b2cd4d03338630cf3d42ce7be8c20
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo $product['name']; ?></h5>
                                 <p class="card-text">$<?php echo number_format($product['sale_price'], 2); ?></p>
