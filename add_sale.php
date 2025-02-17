@@ -3,6 +3,10 @@
   require_once('includes/load.php');
   page_require_level(3);
 
+  function add_to_cart($product_id, $quantity) {
+    // Add logic to add item to cart
+  }
+
   if(isset($_POST['add_sale'])){
     $req_fields = array('s_id','quantity','price','total', 'date');
     validate_fields($req_fields);
