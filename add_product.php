@@ -4,7 +4,7 @@ require_once('includes/load.php');
 page_require_level(2);
 
 $all_categories = find_all('categories');
-$all_photo = find_all('media');
+$all_photos = find_all('media');
 
 if (isset($_POST['add_product'])) {
     $req_fields = array('product-title', 'product-categorie', 'product-quantity', 'buying-price', 'saleing-price');
@@ -16,7 +16,7 @@ if (isset($_POST['add_product'])) {
         $p_qty   = remove_junk($db->escape($_POST['product-quantity']));
         $p_buy   = remove_junk($db->escape($_POST['buying-price']));
         $p_sale  = remove_junk($db->escape($_POST['saleing-price']));
-        $media_id = empty($_POST['product-photo']) ? '0' : remove_junk($db->escape($_POST['product-photo']));
+        $media_id = !empty($_POST['product-photo']) ? (int)$_POST['product-photo'] : 0;
         $date    = make_date();
 
         $query  = "INSERT INTO products (name, quantity, buy_price, sale_price, categorie_id, media_id, date) ";
@@ -65,8 +65,8 @@ if (isset($_POST['add_product'])) {
 
                     <div class="form-group">
                         <select class="form-control" name="product-photo">
-                            <option value="">Select Product Photo</option>
-                            <?php foreach ($all_photo as $photo) : ?>
+                            <option value="">Select Product Image</option>
+                            <?php foreach ($all_photos as $photo) : ?>
                                 <option value="<?php echo (int)$photo['id'] ?>"><?php echo $photo['file_name'] ?></option>
                             <?php endforeach; ?>
                         </select>

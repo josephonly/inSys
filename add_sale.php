@@ -3,47 +3,28 @@ $page_title = 'Add Sale';
 require_once('includes/load.php');
 page_require_level(3);
 
-if (isset($_POST['add_sale'])) {
-    $req_fields = array('s_id', 'quantity', 'price', 'total', 'date');
-    validate_fields($req_fields);
-
-    if (empty($errors)) {
-        $p_id    = $db->escape((int)$_POST['s_id']);
-        $s_qty   = $db->escape((int)$_POST['quantity']);
-        $s_total = $db->escape($_POST['total']);
-        $s_date  = make_date();
-
-        $sql  = "INSERT INTO sales (product_id, qty, price, date) VALUES ('{$p_id}', '{$s_qty}', '{$s_total}', '{$s_date}')";
-
-        if ($db->query($sql)) {
-            update_product_qty($s_qty, $p_id);
-            $session->msg('s', "Sale added successfully.");
-            redirect('add_sale.php', false);
-        } else {
-            $session->msg('d', 'Failed to add sale.');
-            redirect('add_sale.php', false);
-        }
-    } else {
-        $session->msg("d", $errors);
-        redirect('add_sale.php', false);
-    }
-}
-
 $products = find_all('products');
 ?>
 
 <?php include_once('layouts/header.php'); ?>
 
+<!-- Link to the external CSS file -->
+<link rel="stylesheet" href="libs/css/add_sale.css">
+
 <div class="container mt-4">
     <div class="row">
-        <!-- Product List -->
         <div class="col-md-8">
             <h3>Choose Product</h3>
             <div class="row">
                 <?php foreach ($products as $product) : ?>
+                    <?php
+                    // Get product image
+                    $image = find_by_id('media', $product['media_id']);
+                    $image_path = $image ? "uploads/products/" . $image['file_name'] : "uploads/no_image.png";
+                    ?>
                     <div class="col-md-4">
                         <div class="card mb-4">
-                            <img class="card-img-top" src="uploads/products/<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>">
+                            <img class="card-img-top" src="<?php echo $image_path; ?>" alt="<?php echo $product['name']; ?>">
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo $product['name']; ?></h5>
                                 <p class="card-text">$<?php echo number_format($product['sale_price'], 2); ?></p>
@@ -60,7 +41,6 @@ $products = find_all('products');
             </div>
         </div>
 
-        <!-- Bill Section -->
         <div class="col-md-4">
             <h3>Bill</h3>
             <div class="card">
