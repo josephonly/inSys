@@ -63,11 +63,6 @@
       <i class="glyphicon glyphicon-list-alt"></i>
       <span>Inventory</span>
     </a>
-    <ul class="nav submenu">
-      <li><a href="inventory.php">Manage Inventory</a> </li>
-      <li><a href="add_inventory.php">Add Inventory</a> </li>
-      <li><a href="inventory_report.php">Inventory Report</a> </li>
-    </ul>
   </li>
 
   <!-- Date and Time Section -->
