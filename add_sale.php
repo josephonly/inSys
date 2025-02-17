@@ -36,6 +36,16 @@
         }
   }
 
+  function add_to_cart($product_id, $quantity) {
+    // Add logic to add item to cart
+  }
+
+  if(isset($_POST['add_to_cart'])) {
+    $product_id = $_POST['product_id'];
+    $quantity = $_POST['quantity'];
+    add_to_cart($product_id, $quantity);
+  }
+
 ?>
 <?php include_once('layouts/header.php'); ?>
 <div class="row">
@@ -61,7 +71,7 @@
       <div class="panel-heading clearfix">
         <strong>
           <span class="glyphicon glyphicon-th"></span>
-          <span>Sale Eidt</span>
+          <span>Sale Edit</span>
        </strong>
       </div>
       <div class="panel-body">
@@ -75,8 +85,19 @@
             <th> Date</th>
             <th> Action</th>
            </thead>
-             <tbody  id="product_info"> </tbody>
+             <tbody id="product_info">
+               <!-- Existing product info rows -->
+             </tbody>
          </table>
+         <div class="form-group">
+           <label for="product_id">Product ID</label>
+           <input type="text" name="product_id" class="form-control" required>
+         </div>
+         <div class="form-group">
+           <label for="quantity">Quantity</label>
+           <input type="number" name="quantity" class="form-control" required>
+         </div>
+         <button type="submit" name="add_to_cart" class="btn btn-primary">Add to Cart</button>
        </form>
       </div>
     </div>
