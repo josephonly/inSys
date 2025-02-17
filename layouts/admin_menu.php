@@ -58,6 +58,17 @@
       <li><a href="daily_sales.php">Daily sales</a> </li>
     </ul>
   </li>
+  <li>
+    <a href="#" class="submenu-toggle">
+      <i class="glyphicon glyphicon-list-alt"></i>
+      <span>Inventory</span>
+    </a>
+    <ul class="nav submenu">
+      <li><a href="inventory.php">Manage Inventory</a> </li>
+      <li><a href="add_inventory.php">Add Inventory</a> </li>
+      <li><a href="inventory_report.php">Inventory Report</a> </li>
+    </ul>
+  </li>
 
   <!-- Date and Time Section -->
   <li style="position: fixed; bottom: 0; width: 14.4%; background-color: #f8f9fa; padding: 13px; border-top: 1px solid #ddd;">
