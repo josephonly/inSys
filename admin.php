@@ -20,19 +20,7 @@
      <?php echo display_msg($msg); ?>
    </div>
 </div>
-  <div class="row">
-    <a href="users.php" style="color:black;">
-		<div class="col-md-3">
-       <div class="panel panel-box clearfix">
-         <div class="panel-icon pull-left bg-secondary1">
-          <i class="glyphicon glyphicon-user"></i>
-        </div>
-        <div class="panel-value pull-right">
-          <h2 class="margin-top"> <?php  echo $c_user['total']; ?> </h2>
-          <p class="text-muted">Users</p>
-        </div>
-       </div>
-    </div>
+
 	</a>
 	
 	<a href="categorie.php" style="color:black;">
@@ -47,7 +35,7 @@
         </div>
        </div>
     </div>
-	</a>
+</a>
 	
 	<a href="product.php" style="color:black;">
     <div class="col-md-3">
