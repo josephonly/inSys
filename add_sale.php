@@ -37,6 +37,7 @@
         <?php 
           $products = find_all('products'); // Fetch products from database
           foreach ($products as $product): 
+            if (!isset($product['price'])) continue; // Skip products without price
         ?>
         <div class="col-md-4">
           <div class="card mb-4">
