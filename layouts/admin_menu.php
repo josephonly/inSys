@@ -60,7 +60,7 @@
   </li>
   <li>
     <a href="inventory.php">
-      <i class="glyphicon glyphicon-picture"></i>
+      <i class="glyphicon glyphicon-list-alt"></i>
       <span>Inventory</span>
     </a>
   </li>
