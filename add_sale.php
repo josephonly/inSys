@@ -61,13 +61,17 @@ $products = find_all('products');
             const id = this.getAttribute('data-id');
             const name = this.getAttribute('data-name');
             const price = parseFloat(this.getAttribute('data-price'));
-            total += price;
+            const quantity = prompt("Enter quantity:", 1);
+            if (quantity === null || quantity <= 0) return;
+
+            const itemTotal = price * quantity;
+            total += itemTotal;
             document.getElementById('total-price').innerText = total.toFixed(2);
 
             let billItem = document.createElement('li');
             billItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-            billItem.innerHTML = name + " - $" + price.toFixed(2) + 
-                `<button class="btn btn-danger btn-sm cancel-item" data-id="${id}" data-price="${price}">Cancel</button>`;
+            billItem.innerHTML = `${name} - $${price.toFixed(2)} x ${quantity} = $${itemTotal.toFixed(2)}` + 
+                `<button class="btn btn-danger btn-sm cancel-item" data-id="${id}" data-price="${itemTotal}">Cancel</button>`;
             document.getElementById('bill-items').appendChild(billItem);
 
             billItem.querySelector('.cancel-item').addEventListener('click', function() {
