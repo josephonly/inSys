@@ -66,6 +66,7 @@ body{
   text-transform: uppercase;
   letter-spacing: .5px;
   padding: 15px;
+  border-radius: 0;
 }.panel-box{
   width: 100%;
   height: 15%;
