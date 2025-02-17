@@ -33,13 +33,14 @@
   <div class="row">
     <div class="col-md-8">
       <h3 class="mb-3">Choose Menu</h3>
-      <div class="row">
+      <input type="text" id="search-bar" class="form-control mb-3" placeholder="Search for items...">
+      <div class="row" id="product-list">
         <?php 
           $products = find_all('products'); // Fetch products from database
           foreach ($products as $product): 
             if (!isset($product['price'])) continue; // Skip products without price
         ?>
-        <div class="col-md-4">
+        <div class="col-md-4 product-item">
           <div class="card mb-4">
             <img class="card-img-top" src="uploads/products/<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>">
             <div class="card-body">
@@ -94,6 +95,18 @@
 
       bill.push({ id, name, price });
       document.getElementById('bill-data').value = JSON.stringify(bill);
+    });
+  });
+
+  document.getElementById('search-bar').addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    document.querySelectorAll('.product-item').forEach(item => {
+      const productName = item.querySelector('.card-title').innerText.toLowerCase();
+      if (productName.includes(searchTerm)) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
     });
   });
 </script>
