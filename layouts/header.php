@@ -17,6 +17,7 @@
   <?php  if ($session->isUserLoggedIn(true)): ?>
     <header id="header">
       <div class="logo pull-left"> Dairy Daily</div>
+      
       <div class="header-content">
       
       <div class="pull-right clearfix">
