@@ -2,7 +2,7 @@
   <li>
     <a href="admin.php">
       <i class="glyphicon glyphicon-home"></i>
-      <span>Dash</span>
+      <span>Dashboard</span>
     </a>
   </li>
   <li>
