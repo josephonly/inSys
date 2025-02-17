@@ -16,7 +16,7 @@
 
 <div class="login-container">
     <img src="libs/images/logo.png" alt="Dairy Daily Logo" class="login-logo">  <!-- Add this line -->
-    <h1>Point of Sale Syste</h1>
+    <h1>Point of Sale System</h1>
     
     <?php echo display_msg($msg); ?>
     <form method="post" action="auth_v2.php">
