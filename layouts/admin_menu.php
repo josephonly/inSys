@@ -59,8 +59,8 @@
     </ul>
   </li>
   <li>
-    <a href="#" class="submenu-toggle">
-      <i class="glyphicon glyphicon-list-alt"></i>
+    <a href="inventory.php">
+      <i class="glyphicon glyphicon-picture"></i>
       <span>Inventory</span>
     </a>
   </li>
