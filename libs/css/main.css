@@ -209,9 +209,9 @@ body{
   font-size: 14px;
   font-weight: 300;
   letter-spacing: 1.5px;
-  text-shadow: 0 1px rgb(0, 0, 0);
+  text-shadow: 0 1px rgb(31, 30, 33);
 }.sidebar ul li a i{
-  color: #97b0cc;
+  color: #000000;
   padding: 15px 22px;
   text-align: center;
 }ul.submenu{
