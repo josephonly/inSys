@@ -16,8 +16,9 @@
   <body>
   <?php  if ($session->isUserLoggedIn(true)): ?>
     <header id="header">
+    <img src="C:\xampp\htdocs\inSys\uploads\images\logo.png" alt="Logo" style="background: none; height: 40px; margin-right: 10px; border-radius: 100%;">
       <div class="logo pull-left"> Dairy Daily</div>
-      <img src="\htdocs\inSys-1\uploads\users" alt="Logo" style="background: none; height: 40px; margin-right: 10px; border-radius: 100%;">
+      
       <div class="header-content">
       
       <div class="pull-right clearfix">
