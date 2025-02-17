@@ -9,7 +9,7 @@ $products = find_all('products');
 <?php include_once('layouts/header.php'); ?>
 
 <!-- Link to the external CSS file -->
-<link rel="stylesheet" href="css/add_sale.css">
+<link rel="stylesheet" href="libs/css/add_sale.css">
 
 <div class="container mt-4">
     <div class="row">
