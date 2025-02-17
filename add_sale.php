@@ -43,7 +43,8 @@ $products = find_all('products');
                 <?php foreach ($products as $product) : ?>
                     <div class="col-md-4">
                         <div class="card mb-4">
-                            <img class="card-img-top" src="uploads/products/<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>">
+                        <img class="card-img-top" src="uploads/products/<?php echo !empty($product['image']) ? $product['image'] : 'default.png'; ?>" alt="<?php echo $product['name']; ?>">
+
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo $product['name']; ?></h5>
                                 <p class="card-text">$<?php echo number_format($product['sale_price'], 2); ?></p>
