@@ -8,7 +8,7 @@
   <li>
     <a href="#" class="submenu-toggle">
       <i class="glyphicon glyphicon-user"></i>
-      <span>User Management</span>
+      <span>User </span>
     </a>
     <ul class="nav submenu">
       <li><a href="group.php">Manage Groups</a> </li>
