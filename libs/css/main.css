@@ -209,7 +209,7 @@ body{
   font-size: 14px;
   font-weight: 300;
   letter-spacing: 1.5px;
-  text-shadow: 0 1px rgb(67, 51, 123);
+  text-shadow: 0 1px rgb(0, 0, 0);
 }.sidebar ul li a i{
   color: #97b0cc;
   padding: 15px 22px;
