@@ -58,15 +58,24 @@ $products = find_all('products');
     let total = 0;
     document.querySelectorAll('.add-to-bill').forEach(button => {
         button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
             const name = this.getAttribute('data-name');
             const price = parseFloat(this.getAttribute('data-price'));
             total += price;
             document.getElementById('total-price').innerText = total.toFixed(2);
 
             let billItem = document.createElement('li');
-            billItem.className = 'list-group-item';
-            billItem.innerText = name + " - $" + price.toFixed(2);
+            billItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+            billItem.innerHTML = name + " - $" + price.toFixed(2) + 
+                `<button class="btn btn-danger btn-sm cancel-item" data-id="${id}" data-price="${price}">Cancel</button>`;
             document.getElementById('bill-items').appendChild(billItem);
+
+            billItem.querySelector('.cancel-item').addEventListener('click', function() {
+                const itemPrice = parseFloat(this.getAttribute('data-price'));
+                total -= itemPrice;
+                document.getElementById('total-price').innerText = total.toFixed(2);
+                this.parentElement.remove();
+            });
         });
     });
 </script>
