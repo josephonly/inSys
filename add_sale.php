@@ -113,11 +113,12 @@ $categories = find_all('categories');
             document.getElementById('bill-items').appendChild(billItem);
 
             billItem.querySelector('.cancel-item').addEventListener('click', function() {
-                const itemPrice = parseFloat(this.getAttribute('data-price'));
-                total -= itemPrice;
-                document.getElementById('total-price').innerText = total.toFixed(2);
-                this.parentElement.remove();
-            });
+    const itemPrice = parseFloat(this.getAttribute('data-price'));
+    total -= itemPrice;
+    document.getElementById('total-price').innerText = total.toFixed(2);
+    billItem.remove(); // Corrected to remove the entire bill item
+});
+
 
             billItem.querySelector('.decrease-quantity').addEventListener('click', function() {
                 let currentQuantity = parseInt(billItem.querySelector('.item-quantity').innerText);
