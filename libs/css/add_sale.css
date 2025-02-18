@@ -1,37 +1,269 @@
-/* add_sale.css */
-.card-img-top {
-    width: 100%; /* Ensure full width */
-    height: 200px; /* Set fixed height */
-    object-fit: cover; /* Prevent distortion */
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+/* Container */
+.container {
+    width: 100%;
+    margin: 0 auto;
 }
 
+/* Row and Columns */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.col-md-8 {
+    padding: 20px 15px;
+    flex: 0 0 40%; /* Two columns for medium screens */
+    margin-top: 100px;
+}
+
+.col-md-4 {
+    flex: 0 0 45%; /* Three columns for medium screens */
+}
+
+/* Category Box */
+#category-filter {
+    padding: 10px;
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9; /* Light background for the category filter */
+    margin-bottom: 20px; /* Space below the category filter */
+}
+
+/* Product Box */
+.product-item {
+    border: 1px solid #949292; /* Border for each product */
+    padding: 15px; /* Padding inside each product box */
+    background-color: #ffffff; /* Light background for products */
+    border-radius: 5px; /* Rounded corners for the product box */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for product box */
+    margin-bottom: 15px; /* Space between product items */
+    transition: transform 0.2s ease-in-out; /* Smooth animation effect */
+}
+
+/* Hover effect for product boxes */
+.product-item:hover {
+    transform: scale(1.05); /* Slightly scale up the box on hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
+}
+
+/* Product Image */
+.card-img-top {
+    width: 100%;
+    height: 200px; /* Fixed height for the product image */
+    object-fit: cover; /* Ensure the image covers the area */
+    border-radius: 4px; /* Rounded corners for the image */
+}
+
+/* Card Styles */
 .card {
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border: none; /* Remove border */
+    box-shadow: none; /* Remove shadow */
+    background-color: transparent; /* Make background transparent */
+}
+
+.card-img-top {
+    width: 100%;
+    height: 50%;
+    object-fit: cover; /* Makes sure the image covers the area without distortion */
 }
 
 .card-body {
+    padding: 15px;
+    flex-grow: 1; /* Makes sure the body takes up available space */
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* Buttons */
+.btn {
+    padding: 8px 16px;
+    border-radius: 4px;
     text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 14px;
+    border: 1px solid transparent;
 }
 
 .btn-primary {
-    width: 100%;
-    border-radius: 20px;
-}
-
-.list-group-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#total-price {
-    font-weight: bold;
-    color: #28a745;
+    background-color: #007bff;
+    color: #fff;
 }
 
 .btn-success {
-    margin-top: 10px;
+    background-color: #28a745;
+    color: #fff;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.btn-sm {
+    font-size: 12px;
+    padding: 5px 10px;
+}
+
+/* Input Field */
+input[type="number"] {
+    padding: 8px;
+    width: 100%;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+/* Table Styles for Bill */
+#bill-table {
+    border: 1px solid #949292; /* Border for each product */
+    padding: 15px; /* Padding inside each product box */
+    background-color: #ffffff; /* Light background for products */
+    border-radius: 5px; /* Rounded corners for the product box */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for product box */
+    margin-bottom: 15px; /* Space between product items */
+    transition: transform 0.2s ease-in-out; /* Smooth animation effect */
+}
+
+#bill-table th, #bill-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+#bill-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+#bill-items td {
+    vertical-align: middle;
+}
+
+#bill-items .btn-group button {
+    font-size: 12px;
+    padding: 5px 10px;
+}
+
+/* Buttons in the table */
+#bill-items .decrease-quantity,
+#bill-items .increase-quantity,
+#bill-items .cancel-item {
+    margin-right: 5px;
+}
+
+/* Resize specific columns for better visibility */
+#bill-table th:nth-child(1), #bill-table td:nth-child(1) {
+    width: 40%; /* First column (e.g., Product Name) */
+}
+
+#bill-table th:nth-child(2), #bill-table td:nth-child(2) {
+    width: 20%; /* Second column (e.g., Quantity) */
+}
+
+#bill-table th:nth-child(3), #bill-table td:nth-child(3) {
+    width: 20%; /* Third column (e.g., Price) */
+}
+
+#bill-table th:nth-child(4), #bill-table td:nth-child(4) {
+    width: 20%; /* Fourth column (e.g., Actions) */
+}
+
+/* Hover effect for table rows */
+#bill-table tr:hover {
+    background-color: #f1f1f1; /* Light gray background when hovering over rows */
+}
+
+/* Bill Section Box */
+#bill-section {
+    border: 1px solid #949292; /* Border for the bill section */
+    padding: 20px; /* Padding inside the bill section */
+    background-color: #ffffff; /* Light background for the bill section */
+    border-radius: 5px; /* Rounded corners for the bill section */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for the bill section */
+    margin-bottom: 20px; /* Space below the bill section */
+}
+
+/* Responsive Design */
+@media (max-width: 800px) {
+    .col-md-8, .col-md-4 {
+        flex: 0 0 100%;
+    }
+
+    #bill-table th, #bill-table td {
+        padding: 8px;
+    }
+
+    /* Adjust column widths for smaller screens */
+    #bill-table th:nth-child(1), #bill-table td:nth-child(1) {
+        width: 30%;
+    }
+
+    #bill-table th:nth-child(2), #bill-table td:nth-child(2) {
+        width: 20%;
+    }
+
+    #bill-table th:nth-child(3), #bill-table td:nth-child(3) {
+        width: 20%;
+    }
+
+    #bill-table th:nth-child(4), #bill-table td:nth-child(4) {
+        width: 30%;
+    }
+
+    /* Stack buttons vertically on smaller screens */
+    #bill-items .btn-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #bill-items .btn-group button {
+        margin-bottom: 5px;
+    }
+}
+
+@media (max-width: 600px) {
+    /* Further adjustments for very small screens */
+    #bill-table th, #bill-table td {
+        padding: 6px;
+        font-size: 14px;
+    }
+
+    #bill-table th:nth-child(1), #bill-table td:nth-child(1) {
+        width: 40%;
+    }
+
+    #bill-table th:nth-child(2), #bill-table td:nth-child(2) {
+        width: 20%;
+    }
+
+    #bill-table th:nth-child(3), #bill-table td:nth-child(3) {
+        width: 20%;
+    }
+
+    #bill-table th:nth-child(4), #bill-table td:nth-child(4) {
+        width: 20%;
+    }
+
+    /* Hide less important columns on very small screens */
+    #bill-table th:nth-child(3),
+    #bill-table td:nth-child(3) {
+        display: none;
+    }
 }
