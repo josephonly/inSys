@@ -61,7 +61,11 @@ $products = find_all('products');
             const id = this.getAttribute('data-id');
             const name = this.getAttribute('data-name');
             const price = parseFloat(this.getAttribute('data-price'));
-           
+            const quantity = prompt("Enter quantity:", 1);
+            if (quantity === null || quantity <= 0) return;
+
+            const itemTotal = price * quantity;
+            total += itemTotal;
             document.getElementById('total-price').innerText = total.toFixed(2);
 
             let billItem = document.createElement('li');
