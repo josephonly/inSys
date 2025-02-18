@@ -208,17 +208,14 @@ function tableExists($table){
    /* Function for Finding all product name
    /* JOIN with categorie  and media database table
    /*--------------------------------------------------------------*/
-  function join_product_table(){
-     global $db;
-     $sql  =" SELECT p.id,p.name,p.quantity,p.buy_price,p.sale_price,p.media_id,p.date,c.name";
-    $sql  .=" AS categorie,m.file_name AS image";
-    $sql  .=" FROM products p";
-    $sql  .=" LEFT JOIN categories c ON c.id = p.categorie_id";
-    $sql  .=" LEFT JOIN media m ON m.id = p.media_id";
-    $sql  .=" ORDER BY p.id ASC";
-    return find_by_sql($sql);
-
-   }
+   function join_product_table() {
+    global $db;
+    $query = "SELECT p.id, p.name, p.sale_price, p.date, c.name AS categorie, m.file_name AS image
+              FROM products p
+              LEFT JOIN categories c ON p.categorie_id = c.id
+              LEFT JOIN media m ON p.media_id = m.id";
+    return find_by_sql($query);
+}
   /*--------------------------------------------------------------*/
   /* Function for Finding all product name
   /* Request coming from ajax.php for auto suggest
