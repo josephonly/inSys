@@ -5,22 +5,21 @@ page_require_level(2);
 
 $all_categories = find_all('categories');
 $all_photos = find_all('media');
+$all_ingredients = find_all('ingredients'); // Fetch all ingredients from the database
 
 if (isset($_POST['add_product'])) {
-    $req_fields = array('product-title', 'product-categorie', 'product-quantity', 'buying-price', 'saleing-price');
+    $req_fields = array('product-title', 'product-categorie', 'saleing-price');
     validate_fields($req_fields);
 
     if (empty($errors)) {
         $p_name  = remove_junk($db->escape($_POST['product-title']));
         $p_cat   = remove_junk($db->escape($_POST['product-categorie']));
-        $p_qty   = remove_junk($db->escape($_POST['product-quantity']));
-        $p_buy   = remove_junk($db->escape($_POST['buying-price']));
         $p_sale  = remove_junk($db->escape($_POST['saleing-price']));
         $media_id = !empty($_POST['product-photo']) ? (int)$_POST['product-photo'] : 0;
         $date    = make_date();
 
-        $query  = "INSERT INTO products (name, quantity, buy_price, sale_price, categorie_id, media_id, date) ";
-        $query .= "VALUES ('{$p_name}', '{$p_qty}', '{$p_buy}', '{$p_sale}', '{$p_cat}', '{$media_id}', '{$date}') ";
+        $query  = "INSERT INTO products (name, sale_price, categorie_id, media_id, date) ";
+        $query .= "VALUES ('{$p_name}', '{$p_sale}', '{$p_cat}', '{$media_id}', '{$date}') ";
         $query .= "ON DUPLICATE KEY UPDATE name='{$p_name}'";
 
         if ($db->query($query)) {
@@ -51,7 +50,7 @@ if (isset($_POST['add_product'])) {
             <div class="panel-body">
                 <form method="post" action="add_product.php">
                     <div class="form-group">
-                        <input type="text" class="form-control" name="product-title" placeholder="Product Title">
+                        <input type="text" class="form-control" name="product-title" placeholder="Product Name">
                     </div>
 
                     <div class="form-group">
@@ -73,18 +72,30 @@ if (isset($_POST['add_product'])) {
                     </div>
 
                     <div class="form-group">
-                        <input type="number" class="form-control" name="product-quantity" placeholder="Product Quantity">
-                    </div>
-
-                    <div class="form-group">
-                        <input type="number" class="form-control" name="buying-price" placeholder="Buying Price">
-                    </div>
-
-                    <div class="form-group">
                         <input type="number" class="form-control" name="saleing-price" placeholder="Selling Price">
                     </div>
 
                     <button type="submit" name="add_product" class="btn btn-success">Add Product</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong><span class="glyphicon glyphicon-th"></span> Select Ingredients</strong>
+            </div>
+            <div class="panel-body">
+                <form method="post" action="add_product.php">
+                    <div class="form-group">
+                        <select class="form-control" name="product-ingredients[]" multiple>
+                            <option value="">Select Ingredients</option>
+                            <?php foreach ($all_ingredients as $ingredient) : ?>
+                                <option value="<?php echo (int)$ingredient['id'] ?>"><?php echo $ingredient['name'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <button type="submit" name="add_ingredients" class="btn btn-primary">Add Ingredients</button>
                 </form>
             </div>
         </div>
