@@ -6,14 +6,15 @@ page_require_level(2);
 $all_ingredients = find_all('ingredients');
 
 if (isset($_POST['add_ingredient'])) {
-    $req_fields = array('ingredient-name', 'ingredient-stock');
+    $req_fields = array('ingredient-name', 'ingredient-stock', 'ingredient-unit');
     validate_fields($req_fields);
 
     if (empty($errors)) {
         $i_name  = remove_junk($db->escape($_POST['ingredient-name']));
         $i_stock = (int) $_POST['ingredient-stock'];
+        $i_unit  = remove_junk($db->escape($_POST['ingredient-unit']));
         
-        $query  = "INSERT INTO ingredients (name, stock) VALUES ('{$i_name}', '{$i_stock}') ";
+        $query  = "INSERT INTO ingredients (name, stock, unit) VALUES ('{$i_name}', '{$i_stock}', '{$i_unit}') ";
         $query .= "ON DUPLICATE KEY UPDATE stock=stock+{$i_stock}";
         
         if ($db->query($query)) {
@@ -63,6 +64,7 @@ if (isset($_POST['restock_ingredient'])) {
                         <tr>
                             <th>Name</th>
                             <th>Stock</th>
+                            <th>Unit</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -71,6 +73,7 @@ if (isset($_POST['restock_ingredient'])) {
                         <tr>
                             <td><?php echo $ingredient['name']; ?></td>
                             <td><?php echo $ingredient['stock']; ?></td>
+                            <td><?php echo $ingredient['unit']; ?></td>
                             <td>
                                 <form method="post" action="inventory.php" style="display:inline;">
                                     <input type="hidden" name="ingredient-id" value="<?php echo (int)$ingredient['id']; ?>">
@@ -98,6 +101,15 @@ if (isset($_POST['restock_ingredient'])) {
                     </div>
                     <div class="form-group">
                         <input type="number" class="form-control" name="ingredient-stock" placeholder="Initial Stock" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" name="ingredient-unit" required>
+                            <option value="grams">Grams</option>
+                            <option value="kilograms">Kilograms</option>
+                            <option value="liters">Liters</option>
+                            <option value="milliliters">Milliliters</option>
+                            <option value="pieces">Pieces</option>
+                        </select>
                     </div>
                     <button type="submit" name="add_ingredient" class="btn btn-success">Add Ingredient</button>
                 </form>
