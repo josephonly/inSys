@@ -132,13 +132,14 @@ input[type="number"] {
 
 /* Table Styles for Bill */
 #bill-table {
-    border: 1px solid #949292; /* Border for each product */
-    padding: 15px; /* Padding inside each product box */
-    background-color: #ffffff; /* Light background for products */
-    border-radius: 5px; /* Rounded corners for the product box */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for product box */
-    margin-bottom: 15px; /* Space between product items */
-    transition: transform 0.2s ease-in-out; /* Smooth animation effect */
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    table-layout: auto; /* Makes the table columns have a fixed width */
+    border: 1px solid #ddd; /* Add a border around the entire table */
+    border-radius: 8px; /* Rounded corners for the table */
+    padding: 15px; /* Padding inside the table */
+    background-color: #fff; /* White background for the table */
 }
 
 #bill-table th, #bill-table td {
@@ -188,16 +189,6 @@ input[type="number"] {
 /* Hover effect for table rows */
 #bill-table tr:hover {
     background-color: #f1f1f1; /* Light gray background when hovering over rows */
-}
-
-/* Bill Section Box */
-#bill-section {
-    border: 1px solid #949292; /* Border for the bill section */
-    padding: 20px; /* Padding inside the bill section */
-    background-color: #ffffff; /* Light background for the bill section */
-    border-radius: 5px; /* Rounded corners for the bill section */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for the bill section */
-    margin-bottom: 20px; /* Space below the bill section */
 }
 
 /* Responsive Design */

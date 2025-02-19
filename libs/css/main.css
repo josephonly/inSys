@@ -280,6 +280,7 @@ table tfoot tr td:first-child{
   -moz-transition: all 300ms ease-in-out;
    transition: all 300ms ease-in-out;
 }.btn-primary {
+    
     color: #fff;
     background-color: #51aded;
     border-color: #3d8fd8
@@ -309,8 +310,8 @@ table tfoot tr td:first-child{
 input[type=file]{
   text-indent: -99999px;
 }td img.img-thumbnail{
-  width: 125px;
-  height: 125px;
+  width: 55px;
+  height: 50px;
   vertical-align: top;
 }.img-avatar{
   width: 50px;
