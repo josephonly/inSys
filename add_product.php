@@ -1,11 +1,12 @@
 <?php
+include 'includes/sql.php';
 $page_title = 'Add Product';
 require_once('includes/load.php');
 page_require_level(2);
 
 $all_categories = find_all('categories');
 $all_photos = find_all('media');
-$all_ingredients = find_all('ingredients'); // Fetch all ingredients from the database
+$all_ingredients = find_all('ingredients');
 
 if (isset($_POST['add_product'])) {
     $req_fields = array('product-title', 'product-categorie', 'saleing-price');
@@ -17,24 +18,49 @@ if (isset($_POST['add_product'])) {
         $p_sale  = remove_junk($db->escape($_POST['saleing-price']));
         $media_id = !empty($_POST['product-photo']) ? (int)$_POST['product-photo'] : 0;
         $date    = make_date();
-
+        
         $query  = "INSERT INTO products (name, sale_price, categorie_id, media_id, date) ";
         $query .= "VALUES ('{$p_name}', '{$p_sale}', '{$p_cat}', '{$media_id}', '{$date}') ";
         $query .= "ON DUPLICATE KEY UPDATE name='{$p_name}'";
 
         if ($db->query($query)) {
-            $session->msg('s', "Product added successfully!");
-            redirect('add_product.php', false);
+            $product_id = $db->insert_id();
+
+            // Handle Ingredients
+            if (!empty($_POST['product-ingredients'])) {
+                foreach ($_POST['product-ingredients'] as $ingredient_id) {
+                    $ingredient_id = (int)$ingredient_id;
+                    $db->query("INSERT INTO product_ingredients (product_id, ingredient_id) VALUES ('{$product_id}', '{$ingredient_id}')");
+
+                    // Deduct from inventory
+                    $db->query("UPDATE ingredients SET stock = stock - 1 WHERE id = '{$ingredient_id}' AND stock > 0");
+                }
+            }
+
+            echo "<script>
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Product and ingredients added successfully!',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location = 'add_product.php';
+                });
+            </script>";
         } else {
-            $session->msg('d', 'Failed to add product.');
-            redirect('add_product.php', false);
+            echo "<script>
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to add product.',
+                    icon: 'error',
+                    confirmButtonText: 'Try Again'
+                });
+            </script>";
         }
-    } else {
-        $session->msg("d", $errors);
-        redirect('add_product.php', false);
     }
 }
 ?>
+
 <?php include_once('layouts/header.php'); ?>
 
 <div class="row">
@@ -50,11 +76,11 @@ if (isset($_POST['add_product'])) {
             <div class="panel-body">
                 <form method="post" action="add_product.php">
                     <div class="form-group">
-                        <input type="text" class="form-control" name="product-title" placeholder="Product Name">
+                        <input type="text" class="form-control" name="product-title" placeholder="Product Name" required>
                     </div>
 
                     <div class="form-group">
-                        <select class="form-control" name="product-categorie">
+                        <select class="form-control" name="product-categorie" required>
                             <option value="">Select Product Category</option>
                             <?php foreach ($all_categories as $cat) : ?>
                                 <option value="<?php echo (int)$cat['id'] ?>"><?php echo $cat['name'] ?></option>
@@ -72,30 +98,19 @@ if (isset($_POST['add_product'])) {
                     </div>
 
                     <div class="form-group">
-                        <input type="number" class="form-control" name="saleing-price" placeholder="Selling Price">
+                        <input type="number" class="form-control" name="saleing-price" placeholder="Selling Price" required>
                     </div>
 
-                    <button type="submit" name="add_product" class="btn btn-success">Add Product</button>
-                </form>
-            </div>
-        </div>
-
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <strong><span class="glyphicon glyphicon-th"></span> Select Ingredients</strong>
-            </div>
-            <div class="panel-body">
-                <form method="post" action="add_product.php">
                     <div class="form-group">
-                        <select class="form-control" name="product-ingredients[]" multiple>
-                            <option value="">Select Ingredients</option>
+                        <label>Select Ingredients</label>
+                        <select class="form-control" name="product-ingredients[]" multiple required>
                             <?php foreach ($all_ingredients as $ingredient) : ?>
-                                <option value="<?php echo (int)$ingredient['id'] ?>"><?php echo $ingredient['name'] ?></option>
+                                <option value="<?php echo (int)$ingredient ['id'] ?>"><?php echo $ingredient['name'] ?> (Stock: <?php echo $ingredient['stock'] ?>)</option>
                             <?php endforeach; ?>
                         </select>
                     </div>
 
-                    <button type="submit" name="add_ingredients" class="btn btn-primary">Add Ingredients</button>
+                    <button type="submit" name="add_product" class="btn btn-success">Add Product</button>
                 </form>
             </div>
         </div>
@@ -103,3 +118,6 @@ if (isset($_POST['add_product'])) {
 </div>
 
 <?php include_once('layouts/footer.php'); ?>
+
+<!-- Include SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
