@@ -88,98 +88,90 @@ $categories = find_all('categories');
 </div>
 
 <script>
-   document.addEventListener("DOMContentLoaded", function() {
     let total = 0;
-    
-    // Function: Update Total
-    function updateTotal() {
-        let totalPrice = 0;
-        document.querySelectorAll(".bill-item").forEach(item => {
-            let price = parseFloat(item.dataset.price);
-            let quantity = parseInt(item.querySelector(".item-quantity").value);
-            let itemTotal = price * quantity;
-            item.querySelector(".item-total").innerText = itemTotal.toFixed(2);
-            totalPrice += itemTotal;
+
+    // Category filter functionality
+    document.getElementById('category-filter').addEventListener('change', function() {
+        let selectedCategory = this.value;
+        document.querySelectorAll('.product-item').forEach(item => {
+            // Show products that match the selected category or show all
+            if (selectedCategory === 'all' || item.getAttribute('data-category') === selectedCategory) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
         });
-        total = totalPrice;
-        document.getElementById("total-price").innerText = total.toFixed(2);
-        updateChange();
-    }
+    });
 
-    // Function: Update Change
-    function updateChange() {
-        let customerMoney = parseFloat(document.getElementById("customer-money").value) || 0;
-        let change = customerMoney - total;
-        document.getElementById("change-amount").innerText = change >= 0 ? change.toFixed(2) : "0.00";
-    }
+    // Add product to bill
+    document.querySelectorAll('.add-to-bill').forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.getAttribute('data-id');
+            const name = this.getAttribute('data-name');
+            const price = parseFloat(this.getAttribute('data-price'));
+            const imagePath = this.getAttribute('data-image');  // Get image path
 
-    // Add to Bill
-    document.querySelectorAll(".add-to-bill").forEach(button => {
-        button.addEventListener("click", function() {
-            const id = this.dataset.id;
-            const name = this.dataset.name;
-            const price = parseFloat(this.dataset.price);
-            const imagePath = this.dataset.image;
-
+            // Check if product already exists in the bill
             let existingItem = document.querySelector(`#bill-items .bill-item[data-id="${id}"]`);
             if (existingItem) {
-                let quantityInput = existingItem.querySelector(".item-quantity");
-                quantityInput.value = parseInt(quantityInput.value) + 1;
-                updateTotal();
+                // If product exists, allow quantity change
+                let quantityInput = existingItem.querySelector('.item-quantity');
+                let currentQuantity = parseInt(quantityInput.value);
+                currentQuantity++;
+                quantityInput.value = currentQuantity;
+                
+                // Update total
+                const itemTotal = price * currentQuantity;
+                existingItem.querySelector('.item-total').innerText = itemTotal.toFixed(2);
+                total += price;
+                document.getElementById('total-price').innerText = total.toFixed(2);
             } else {
-                let billItem = document.createElement("tr");
-                billItem.className = "bill-item";
-                billItem.dataset.id = id;
-                billItem.dataset.price = price;
+                // If product does not exist, add it to the bill
+                const quantity = 1;
+                const itemTotal = price * quantity;
+                total += itemTotal;
+                document.getElementById('total-price').innerText = total.toFixed(2);
+
+                let billItem = document.createElement('tr');
+                billItem.className = 'bill-item';
+                billItem.setAttribute('data-id', id);
                 billItem.innerHTML = `
-                    <td><img src="${imagePath}" class="w-10 h-10 rounded-full"> ${name}</td>
+                    <td><img src="${imagePath}" alt="${name}" width="50" height="50"> ${name}</td>  <!-- Added image -->
                     <td>$${price.toFixed(2)}</td>
-                    <td><input type="number" class="item-quantity w-12 border rounded text-center" value="1" min="1"></td>
-                    <td>$<span class="item-total">${price.toFixed(2)}</span></td>
-                    <td><button class="remove-item bg-red-500 text-white px-2 py-1 rounded">X</button></td>
+                    <td><input type="number" class="item-quantity" value="${quantity}" min="1"></td>
+                    <td>$<span class="item-total">${itemTotal.toFixed(2)}</span></td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-danger btn-sm cancel-item" data-id="${id}" data-price="${itemTotal}">Cancel</button>
+                        </div>
+                    </td>
                 `;
 
-                document.getElementById("bill-items").appendChild(billItem);
+                document.getElementById('bill-items').appendChild(billItem);
 
-                // Add Event Listeners to new items
-                billItem.querySelector(".item-quantity").addEventListener("change", updateTotal);
-                billItem.querySelector(".remove-item").addEventListener("click", function() {
-                    billItem.remove();
-                    updateTotal();
+                // Event listener for canceling the item
+                billItem.querySelector('.cancel-item').addEventListener('click', function() {
+                    const itemPrice = parseFloat(this.getAttribute('data-price'));
+                    total -= itemPrice;
+                    document.getElementById('total-price').innerText = total.toFixed(2);
+                    billItem.remove(); // Remove the entire bill item
+                });
+
+                // Update total when quantity changes
+                billItem.querySelector('.item-quantity').addEventListener('input', function() {
+                    let currentQuantity = parseInt(this.value);
+                    if (currentQuantity < 1) {
+                        this.value = 1;
+                        currentQuantity = 1;
+                    }
+                    const newItemTotal = price * currentQuantity;
+                    total += price * (currentQuantity - 1); // Adjust total for quantity change
+                    document.getElementById('total-price').innerText = total.toFixed(2);
+                    billItem.querySelector('.item-total').innerText = newItemTotal.toFixed(2);
                 });
             }
-
-            updateTotal();
         });
     });
-
-    // Customer Money Input Event
-    document.getElementById("customer-money").addEventListener("input", updateChange);
-
-    // Checkout Button
-    document.getElementById("checkout-button").addEventListener("click", function() {
-        if (total === 0) {
-            alert("No items in the bill!");
-            return;
-        }
-
-        let customerMoney = parseFloat(document.getElementById("customer-money").value) || 0;
-        if (customerMoney < total) {
-            alert("Not enough money!");
-            return;
-        }
-
-        alert("Payment successful! Change: $" + (customerMoney - total).toFixed(2));
-
-        // Reset Bill
-        document.getElementById("bill-items").innerHTML = "";
-        document.getElementById("total-price").innerText = "0.00";
-        document.getElementById("customer-money").value = "";
-        document.getElementById("change-amount").innerText = "0.00";
-        total = 0;
-    });
-});
-
 
     // Update change amount based on customer money input
     document.getElementById('customer-money').addEventListener('input', function() {
