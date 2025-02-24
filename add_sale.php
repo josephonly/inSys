@@ -15,12 +15,11 @@ $categories = find_all('categories');
 
 <div class="container mt-4">
     <div class="row">
-        <!-- Choose Product Section -->
         <div class="col-md-5">
             <h3>Choose Product</h3>
-
+            
             <!-- Category Filter Dropdown -->
-            <div class="select-category-container">
+            <div class="select-category-container"> <!-- Category Box Wrapper -->
                 <select id="category-filter" class="form-control mb-3">
                     <option value="all">All Categories</option>
                     <?php foreach ($categories as $category) : ?>
@@ -28,8 +27,8 @@ $categories = find_all('categories');
                     <?php endforeach; ?>
                 </select>
             </div>
-
-            <div class="row product-grid" id="product-list">
+            
+            <div class="row product-grid" id="product-list"> <!-- Product Box Wrapper -->
                 <?php foreach ($products as $product) : ?>
                     <?php
                     // Get product image
@@ -56,10 +55,9 @@ $categories = find_all('categories');
             </div>
         </div>
 
-        <!-- Bill Section -->
-        <div class="col-md-5">
+        <div class="col-md-4">
             <h3>Bill</h3>
-            <div class="bill-card">
+            <div class="card">
                 <div class="card-body">
                     <!-- Custom Table for Bill -->
                     <table id="bill-table">
@@ -89,7 +87,6 @@ $categories = find_all('categories');
     </div>
 </div>
 
-
 <script>
     let total = 0;
 
@@ -115,7 +112,7 @@ $categories = find_all('categories');
             const imagePath = this.getAttribute('data-image');  // Get image path
 
             // Check if product already exists in the bill
-            let existingItem = document.querySelector(#bill-items .bill-item[data-id="${id}"]);
+            let existingItem = document.querySelector(`#bill-items .bill-item[data-id="${id}"]`);
             if (existingItem) {
                 // If product exists, allow quantity change
                 let quantityInput = existingItem.querySelector('.item-quantity');
@@ -138,7 +135,7 @@ $categories = find_all('categories');
                 let billItem = document.createElement('tr');
                 billItem.className = 'bill-item';
                 billItem.setAttribute('data-id', id);
-                billItem.innerHTML = 
+                billItem.innerHTML = `
                     <td><img src="${imagePath}" alt="${name}" width="50" height="50"> ${name}</td>  <!-- Added image -->
                     <td>$${price.toFixed(2)}</td>
                     <td><input type="number" class="item-quantity" value="${quantity}" min="1"></td>
@@ -148,7 +145,7 @@ $categories = find_all('categories');
                             <button class="btn btn-danger btn-sm cancel-item" data-id="${id}" data-price="${itemTotal}">Cancel</button>
                         </div>
                     </td>
-                ;
+                `;
 
                 document.getElementById('bill-items').appendChild(billItem);
 
