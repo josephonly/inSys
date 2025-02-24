@@ -3,145 +3,205 @@ $page_title = 'Add Sale';
 require_once('includes/load.php');
 page_require_level(3);
 
+// Fetch products and categories
 $products = find_all('products');
 $categories = find_all('categories');
 ?>
 
 <?php include_once('layouts/header.php'); ?>
 
-<!-- Add Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com"></script>
+<!-- Link to the custom CSS file -->
+<link rel="stylesheet" href="libs/css/add_sale.css">
 
-<div class="max-w-7xl mx-auto mt-10 bg-white p-8 rounded-xl shadow-lg">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        
-        <!-- Product Section -->
-        <div>
-            <h3 class="text-2xl font-bold mb-4">Choose Product</h3>
-            <div class="mb-4">
-                <select id="category-filter" class="w-full p-2 border border-gray-300 rounded-lg">
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-5">
+            <h3>Choose Product</h3>
+            
+            <!-- Category Filter Dropdown -->
+            <div class="select-category-container"> <!-- Category Box Wrapper -->
+                <select id="category-filter" class="form-control mb-3">
                     <option value="all">All Categories</option>
                     <?php foreach ($categories as $category) : ?>
-                        <option value="<?php echo htmlspecialchars($category['id']); ?>">
-                            <?php echo htmlspecialchars($category['name']); ?>
-                        </option>
+                        <option value="<?php echo htmlspecialchars($category['id']); ?>"><?php echo htmlspecialchars($category['name']); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
             
-            <!-- Product Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div class="row product-grid" id="product-list"> <!-- Product Box Wrapper -->
                 <?php foreach ($products as $product) : ?>
                     <?php
+                    // Get product image
                     $image = find_by_id('media', $product['media_id']);
                     $image_path = $image ? "uploads/products/" . $image['file_name'] : "uploads/no_image.png";
                     ?>
-                    <div class="bg-white p-4 rounded-lg shadow-md hover:scale-105 transition transform duration-300">
-                        <img src="<?php echo htmlspecialchars($image_path); ?>" 
-                             class="w-full h-40 object-cover rounded-lg">
-                        <h5 class="text-lg font-semibold mt-2"><?php echo htmlspecialchars($product['name']); ?></h5>
-                        <p class="text-gray-600">$<?php echo number_format($product['sale_price'], 2); ?></p>
-                        <button class="mt-3 w-full bg-indigo-500 text-white py-2 rounded-lg hover:bg-indigo-600 transition add-to-bill"
-                                data-id="<?php echo htmlspecialchars($product['id']); ?>"
-                                data-name="<?php echo htmlspecialchars($product['name']); ?>"
-                                data-price="<?php echo htmlspecialchars($product['sale_price']); ?>"
-                                data-image="<?php echo htmlspecialchars($image_path); ?>">
-                            Add to Bill
-                        </button>
+                    <div class="col-md-4 product-item" data-category="<?php echo htmlspecialchars($product['categorie_id']); ?>">
+                        <div class="card mb-4">
+                            <img class="card-img-top" src="<?php echo htmlspecialchars($image_path); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>">
+                            <div class="card-body">
+                                <h5 class="card-title"><?php echo htmlspecialchars($product['name']); ?></h5>
+                                <p class="card-text">$<?php echo number_format($product['sale_price'], 2); ?></p>
+                                <button class="btn btn-primary add-to-bill"
+                                        data-id="<?php echo htmlspecialchars($product['id']); ?>"
+                                        data-name="<?php echo htmlspecialchars($product['name']); ?>"
+                                        data-price="<?php echo htmlspecialchars($product['sale_price']); ?>"
+                                        data-image="<?php echo htmlspecialchars($image_path); ?>"> <!-- Added image data -->
+                                    Add to Bill
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 <?php endforeach; ?>
             </div>
         </div>
 
-        <!-- Bill Section -->
-        <div class="bg-gray-100 p-6 rounded-xl shadow-md">
-            <h3 class="text-2xl font-bold mb-4">Bill</h3>
-            <table class="w-full border-collapse">
-                <thead>
-                    <tr class="bg-gray-200 text-gray-700">
-                        <th class="p-2">Product</th>
-                        <th class="p-2">Price</th>
-                        <th class="p-2">Quantity</th>
-                        <th class="p-2">Total</th>
-                        <th class="p-2">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="bill-items" class="text-gray-700">
-                    <!-- Dynamic Bill Items -->
-                </tbody>
-            </table>
-            
-            <h5 class="text-xl font-bold mt-4">Total: $<span id="total-price">0.00</span></h5>
-            
-            <div class="mt-3">
-                <label for="customer-money" class="block font-semibold">Customer Money:</label>
-                <input type="number" id="customer-money" class="w-full p-2 border rounded-lg" placeholder="Enter amount">
+        <div class="col-md-4">
+            <h3>Bill</h3>
+            <div class="card">
+                <div class="card-body">
+                    <!-- Custom Table for Bill -->
+                    <table id="bill-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bill-items">
+                            <!-- Bill items will be appended here -->
+                        </tbody>
+                    </table>
+                    <h5>Total: $<span id="total-price">0.00</span></h5>
+                    <div class="form-group">
+                        <label for="customer-money">Customer Money:</label>
+                        <input type="number" id="customer-money" class="form-control" placeholder="Enter amount">
+                    </div>
+                    <h5>Change: $<span id="change-amount">0.00</span></h5>
+                    <button class="btn btn-success" id="checkout-button">Checkout</button>
+                </div>
             </div>
-            
-            <h5 class="text-lg font-bold mt-2">Change: $<span id="change-amount">0.00</span></h5>
-            
-            <button id="checkout-button" class="w-full bg-green-500 text-white py-2 mt-4 rounded-lg hover:bg-green-600 transition">
-                Checkout
-            </button>
         </div>
-
     </div>
 </div>
 
 <script>
+   document.addEventListener("DOMContentLoaded", function() {
     let total = 0;
-
-    // Category filter
-    document.getElementById('category-filter').addEventListener('change', function() {
-        let selectedCategory = this.value;
-        document.querySelectorAll('.product-item').forEach(item => {
-            if (selectedCategory === 'all' || item.getAttribute('data-category') === selectedCategory) {
-                item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
-            }
+    
+    // Function: Update Total
+    function updateTotal() {
+        let totalPrice = 0;
+        document.querySelectorAll(".bill-item").forEach(item => {
+            let price = parseFloat(item.dataset.price);
+            let quantity = parseInt(item.querySelector(".item-quantity").value);
+            let itemTotal = price * quantity;
+            item.querySelector(".item-total").innerText = itemTotal.toFixed(2);
+            totalPrice += itemTotal;
         });
-    });
+        total = totalPrice;
+        document.getElementById("total-price").innerText = total.toFixed(2);
+        updateChange();
+    }
 
-    // Add to bill functionality
-    document.querySelectorAll('.add-to-bill').forEach(button => {
-        button.addEventListener('click', function() {
-            const id = this.getAttribute('data-id');
-            const name = this.getAttribute('data-name');
-            const price = parseFloat(this.getAttribute('data-price'));
-            const imagePath = this.getAttribute('data-image');
+    // Function: Update Change
+    function updateChange() {
+        let customerMoney = parseFloat(document.getElementById("customer-money").value) || 0;
+        let change = customerMoney - total;
+        document.getElementById("change-amount").innerText = change >= 0 ? change.toFixed(2) : "0.00";
+    }
+
+    // Add to Bill
+    document.querySelectorAll(".add-to-bill").forEach(button => {
+        button.addEventListener("click", function() {
+            const id = this.dataset.id;
+            const name = this.dataset.name;
+            const price = parseFloat(this.dataset.price);
+            const imagePath = this.dataset.image;
 
             let existingItem = document.querySelector(`#bill-items .bill-item[data-id="${id}"]`);
             if (existingItem) {
-                let quantityInput = existingItem.querySelector('.item-quantity');
-                let currentQuantity = parseInt(quantityInput.value);
-                currentQuantity++;
-                quantityInput.value = currentQuantity;
-
-                const itemTotal = price * currentQuantity;
-                existingItem.querySelector('.item-total').innerText = itemTotal.toFixed(2);
-                total += price;
-                document.getElementById('total-price').innerText = total.toFixed(2);
+                let quantityInput = existingItem.querySelector(".item-quantity");
+                quantityInput.value = parseInt(quantityInput.value) + 1;
+                updateTotal();
             } else {
-                const quantity = 1;
-                const itemTotal = price * quantity;
-                total += itemTotal;
-                document.getElementById('total-price').innerText = total.toFixed(2);
-
-                let billItem = document.createElement('tr');
-                billItem.className = 'bill-item';
-                billItem.setAttribute('data-id', id);
+                let billItem = document.createElement("tr");
+                billItem.className = "bill-item";
+                billItem.dataset.id = id;
+                billItem.dataset.price = price;
                 billItem.innerHTML = `
                     <td><img src="${imagePath}" class="w-10 h-10 rounded-full"> ${name}</td>
                     <td>$${price.toFixed(2)}</td>
-                    <td><input type="number" class="item-quantity w-12 border rounded" value="${quantity}" min="1"></td>
-                    <td>$<span class="item-total">${itemTotal.toFixed(2)}</span></td>
-                    <td><button class="bg-red-500 text-white px-2 py-1 rounded remove-item">X</button></td>
+                    <td><input type="number" class="item-quantity w-12 border rounded text-center" value="1" min="1"></td>
+                    <td>$<span class="item-total">${price.toFixed(2)}</span></td>
+                    <td><button class="remove-item bg-red-500 text-white px-2 py-1 rounded">X</button></td>
                 `;
 
-                document.getElementById('bill-items').appendChild(billItem);
+                document.getElementById("bill-items").appendChild(billItem);
+
+                // Add Event Listeners to new items
+                billItem.querySelector(".item-quantity").addEventListener("change", updateTotal);
+                billItem.querySelector(".remove-item").addEventListener("click", function() {
+                    billItem.remove();
+                    updateTotal();
+                });
             }
+
+            updateTotal();
         });
+    });
+
+    // Customer Money Input Event
+    document.getElementById("customer-money").addEventListener("input", updateChange);
+
+    // Checkout Button
+    document.getElementById("checkout-button").addEventListener("click", function() {
+        if (total === 0) {
+            alert("No items in the bill!");
+            return;
+        }
+
+        let customerMoney = parseFloat(document.getElementById("customer-money").value) || 0;
+        if (customerMoney < total) {
+            alert("Not enough money!");
+            return;
+        }
+
+        alert("Payment successful! Change: $" + (customerMoney - total).toFixed(2));
+
+        // Reset Bill
+        document.getElementById("bill-items").innerHTML = "";
+        document.getElementById("total-price").innerText = "0.00";
+        document.getElementById("customer-money").value = "";
+        document.getElementById("change-amount").innerText = "0.00";
+        total = 0;
+    });
+});
+
+
+    // Update change amount based on customer money input
+    document.getElementById('customer-money').addEventListener('input', function() {
+        const customerMoney = parseFloat(this.value);
+        const change = customerMoney - total;
+        document.getElementById('change-amount').innerText = change.toFixed(2);
+    });
+
+    // Checkout functionality
+    document.getElementById('checkout-button').addEventListener('click', function() {
+        const customerMoney = parseFloat(document.getElementById('customer-money').value);
+        if (customerMoney < total) {
+            alert('Insufficient funds!');
+        } else {
+            alert('Transaction successful!');
+            // Reset the bill and total
+            document.getElementById('bill-items').innerHTML = '';
+            total = 0;
+            document.getElementById('total-price').innerText = '0.00';
+            document.getElementById('customer-money').value = '';
+            document.getElementById('change-amount').innerText = '0.00';
+        }
     });
 </script>
 
