@@ -18,7 +18,8 @@ if (isset($_POST['add_product'])) {
         $p_sale  = remove_junk($db->escape($_POST['saleing-price']));
         $media_id = !empty($_POST['product-photo']) ? (int)$_POST['product-photo'] : 0;
         $date    = make_date();
-        
+
+        // Insert Product
         $query  = "INSERT INTO products (name, sale_price, categorie_id, media_id, date) ";
         $query .= "VALUES ('{$p_name}', '{$p_sale}', '{$p_cat}', '{$media_id}', '{$date}') ";
         $query .= "ON DUPLICATE KEY UPDATE name='{$p_name}'";
@@ -26,21 +27,25 @@ if (isset($_POST['add_product'])) {
         if ($db->query($query)) {
             $product_id = $db->insert_id();
 
-            // Handle Ingredients
-            if (!empty($_POST['product-ingredients'])) {
-                foreach ($_POST['product-ingredients'] as $ingredient_id) {
+            // Handle Ingredients with Quantities (Record only, no deduction)
+            if (!empty($_POST['ingredient-quantities'])) {
+                foreach ($_POST['ingredient-quantities'] as $ingredient_id => $quantity) {
                     $ingredient_id = (int)$ingredient_id;
-                    $db->query("INSERT INTO product_ingredients (product_id, ingredient_id) VALUES ('{$product_id}', '{$ingredient_id}')");
+                    $quantity = (int)$quantity;
 
-                    // Deduct from inventory
-                    $db->query("UPDATE ingredients SET stock = stock - 1 WHERE id = '{$ingredient_id}' AND stock > 0");
+                    // Process only if quantity is greater than 0
+                    if ($quantity > 0) {
+                        // Insert into product_ingredients table (Record Only)
+                        $db->query("INSERT INTO product_ingredients (product_id, ingredient_id, quantity) 
+                                    VALUES ('{$product_id}', '{$ingredient_id}', '{$quantity}')");
+                    }
                 }
             }
 
             echo "<script>
                 Swal.fire({
                     title: 'Success!',
-                    text: 'Product and ingredients added successfully!',
+                    text: 'Product and ingredients recorded successfully!',
                     icon: 'success',
                     confirmButtonText: 'OK'
                 }).then(() => {
@@ -101,13 +106,17 @@ if (isset($_POST['add_product'])) {
                         <input type="number" class="form-control" name="saleing-price" placeholder="Selling Price" required>
                     </div>
 
+                    <!-- Ingredients Selection (Optional Quantity) -->
                     <div class="form-group">
-                        <label>Select Ingredients</label>
-                        <select class="form-control" name="product-ingredients[]" multiple required>
-                            <?php foreach ($all_ingredients as $ingredient) : ?>
-                                <option value="<?php echo (int)$ingredient ['id'] ?>"><?php echo $ingredient['name'] ?> (Stock: <?php echo $ingredient['stock'] ?>)</option>
-                            <?php endforeach; ?>
-                        </select>
+                        <label>Select Ingredients & Quantity (Optional)</label>
+                        <?php foreach ($all_ingredients as $ingredient) : ?>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><?php echo $ingredient['name']; ?> (Stock: <?php echo $ingredient['stock']; ?>)</span>
+                                </div>
+                                <input type="number" class="form-control" name="ingredient-quantities[<?php echo (int)$ingredient['id']; ?>]" placeholder="Quantity (optional)" min="1">
+                            </div>
+                        <?php endforeach; ?>
                     </div>
 
                     <button type="submit" name="add_product" class="btn btn-success">Add Product</button>

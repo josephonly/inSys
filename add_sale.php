@@ -115,7 +115,7 @@ $categories = find_all('categories');
             const imagePath = this.getAttribute('data-image');  // Get image path
 
             // Check if product already exists in the bill
-            let existingItem = document.querySelector(`#bill-items .bill-item[data-id="${id}"]`);
+            let existingItem = document.querySelector(#bill-items .bill-item[data-id="${id}"]);
             if (existingItem) {
                 // If product exists, allow quantity change
                 let quantityInput = existingItem.querySelector('.item-quantity');
@@ -138,7 +138,7 @@ $categories = find_all('categories');
                 let billItem = document.createElement('tr');
                 billItem.className = 'bill-item';
                 billItem.setAttribute('data-id', id);
-                billItem.innerHTML = `
+                billItem.innerHTML = 
                     <td><img src="${imagePath}" alt="${name}" width="50" height="50"> ${name}</td>  <!-- Added image -->
                     <td>$${price.toFixed(2)}</td>
                     <td><input type="number" class="item-quantity" value="${quantity}" min="1"></td>
@@ -148,7 +148,7 @@ $categories = find_all('categories');
                             <button class="btn btn-danger btn-sm cancel-item" data-id="${id}" data-price="${itemTotal}">Cancel</button>
                         </div>
                     </td>
-                `;
+                ;
 
                 document.getElementById('bill-items').appendChild(billItem);
 
