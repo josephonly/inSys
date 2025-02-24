@@ -15,11 +15,12 @@ $categories = find_all('categories');
 
 <div class="container mt-4">
     <div class="row">
+        <!-- Choose Product Section -->
         <div class="col-md-5">
             <h3>Choose Product</h3>
-            
+
             <!-- Category Filter Dropdown -->
-            <div class="select-category-container"> <!-- Category Box Wrapper -->
+            <div class="select-category-container">
                 <select id="category-filter" class="form-control mb-3">
                     <option value="all">All Categories</option>
                     <?php foreach ($categories as $category) : ?>
@@ -27,8 +28,8 @@ $categories = find_all('categories');
                     <?php endforeach; ?>
                 </select>
             </div>
-            
-            <div class="row product-grid" id="product-list"> <!-- Product Box Wrapper -->
+
+            <div class="row product-grid" id="product-list">
                 <?php foreach ($products as $product) : ?>
                     <?php
                     // Get product image
@@ -55,9 +56,10 @@ $categories = find_all('categories');
             </div>
         </div>
 
-        <div class="col-md-4">
+        <!-- Bill Section -->
+        <div class="col-md-5">
             <h3>Bill</h3>
-            <div class="card">
+            <div class="bill-card">
                 <div class="card-body">
                     <!-- Custom Table for Bill -->
                     <table id="bill-table">
@@ -86,6 +88,7 @@ $categories = find_all('categories');
         </div>
     </div>
 </div>
+
 
 <script>
     let total = 0;

@@ -14,7 +14,7 @@
       <div class="panel panel-default">
         <div class="panel-heading clearfix">
          <div class="pull-right">
-           <a href="add_product.php" class="btn btn-primary">Add New</a>
+           <button class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">Add New</button>
          </div>
         </div>
         <div class="panel-body">
@@ -63,4 +63,50 @@
       </div>
     </div>
   </div>
+
+<!-- Add Product Modal -->
+<div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="addProductModalLabel">Add New Product</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="add_product.php">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="product-title" placeholder="Product Title">
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" name="product-categorie">
+                            <option value="">Select Product Category</option>
+                            <?php foreach ($all_categories as $cat) : ?>
+                            <option value="<?php echo (int)$cat['id'] ?>"><?php echo $cat['name'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" name="product-photo">
+                            <option value="">Select Product Image</option>
+                            <?php foreach ($all_photos as $photo) : ?>
+                            <option value="<?php echo (int)$photo['id'] ?>"><?php echo $photo['file_name'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" class="form-control" name="product-quantity" placeholder="Product Quantity">
+                    </div>
+                    <div class="form-group">
+                        <input type="number" class="form-control" name="buying-price" placeholder="Buying Price">
+                    </div>
+                    <div class="form-group">
+                        <input type="number" class="form-control" name="saleing-price" placeholder="Selling Price">
+                    </div>
+                    <button type="submit" name="add_product" class="btn btn-success">Add Product</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
   <?php include_once('layouts/footer.php'); ?>
