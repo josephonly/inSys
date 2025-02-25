@@ -5,7 +5,7 @@ page_require_level(3);
 
 // Fetch products and categories
 $products = find_all('products');
-$categories = find_all('categories');
+$categories = find_all('categories');   
 ?>
 
 <?php include_once('layouts/header.php'); ?>
@@ -19,19 +19,20 @@ $categories = find_all('categories');
             <h3>Choose Product</h3>
             
             <!-- Category Filter Dropdown -->
-            <div class="select-category-container"> <!-- Category Box Wrapper -->
+            <div class="select-category-container">
                 <select id="category-filter" class="form-control mb-3">
                     <option value="all">All Categories</option>
                     <?php foreach ($categories as $category) : ?>
-                        <option value="<?php echo htmlspecialchars($category['id']); ?>"><?php echo htmlspecialchars($category['name']); ?></option>
+                        <option value="<?php echo htmlspecialchars($category['id']); ?>">
+                            <?php echo htmlspecialchars($category['name']); ?>
+                        </option>
                     <?php endforeach; ?>
                 </select>
             </div>
             
-            <div class="row product-grid" id="product-list"> <!-- Product Box Wrapper -->
+            <div class="row product-grid" id="product-list">
                 <?php foreach ($products as $product) : ?>
                     <?php
-                    // Get product image
                     $image = find_by_id('media', $product['media_id']);
                     $image_path = $image ? "uploads/products/" . $image['file_name'] : "uploads/no_image.png";
                     ?>
@@ -45,7 +46,7 @@ $categories = find_all('categories');
                                         data-id="<?php echo htmlspecialchars($product['id']); ?>"
                                         data-name="<?php echo htmlspecialchars($product['name']); ?>"
                                         data-price="<?php echo htmlspecialchars($product['sale_price']); ?>"
-                                        data-image="<?php echo htmlspecialchars($image_path); ?>"> <!-- Added image data -->
+                                        data-image="<?php echo htmlspecialchars($image_path); ?>">
                                     Add to Bill
                                 </button>
                             </div>
@@ -53,13 +54,19 @@ $categories = find_all('categories');
                     </div>
                 <?php endforeach; ?>
             </div>
+
+            <!-- Pagination Controls -->
+            <div class="pagination-container text-center mt-3">
+                <button id="prev-page" class="btn btn-secondary">Previous</button>
+                <span id="page-info"></span>
+                <button id="next-page" class="btn btn-secondary">Next</button>
+            </div>
         </div>
 
         <div class="col-md-4">
             <h3>Bill</h3>
             <div class="card">
                 <div class="card-body">
-                    <!-- Custom Table for Bill -->
                     <table id="bill-table">
                         <thead>
                             <tr>
@@ -70,9 +77,7 @@ $categories = find_all('categories');
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="bill-items">
-                            <!-- Bill items will be appended here -->
-                        </tbody>
+                        <tbody id="bill-items"></tbody>
                     </table>
                     <h5>Total: $<span id="total-price">0.00</span></h5>
                     <div class="form-group">
@@ -89,12 +94,47 @@ $categories = find_all('categories');
 
 <script>
     let total = 0;
+    let productsPerPage = 4;
+    let currentPage = 1;
+    let products = document.querySelectorAll('.product-item');
+    let totalPages = Math.ceil(products.length / productsPerPage);
+
+    function showPage(page) {
+        let start = (page - 1) * productsPerPage;
+        let end = start + productsPerPage;
+        products.forEach((product, index) => {
+            if (index >= start && index < end) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+
+        document.getElementById('page-info').innerText = `Page ${page} of ${totalPages}`;
+        document.getElementById('prev-page').disabled = page === 1;
+        document.getElementById('next-page').disabled = page === totalPages;
+    }
+
+    document.getElementById('prev-page').addEventListener('click', function() {
+        if (currentPage > 1) {
+            currentPage--;
+            showPage(currentPage);
+        }
+    });
+
+    document.getElementById('next-page').addEventListener('click', function() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            showPage(currentPage);
+        }
+    });
+
+    showPage(currentPage);
 
     // Category filter functionality
     document.getElementById('category-filter').addEventListener('change', function() {
         let selectedCategory = this.value;
-        document.querySelectorAll('.product-item').forEach(item => {
-            // Show products that match the selected category or show all
+        products.forEach(item => {
             if (selectedCategory === 'all' || item.getAttribute('data-category') === selectedCategory) {
                 item.style.display = 'block';
             } else {
@@ -109,24 +149,20 @@ $categories = find_all('categories');
             const id = this.getAttribute('data-id');
             const name = this.getAttribute('data-name');
             const price = parseFloat(this.getAttribute('data-price'));
-            const imagePath = this.getAttribute('data-image');  // Get image path
+            const imagePath = this.getAttribute('data-image');
 
-            // Check if product already exists in the bill
             let existingItem = document.querySelector(`#bill-items .bill-item[data-id="${id}"]`);
             if (existingItem) {
-                // If product exists, allow quantity change
                 let quantityInput = existingItem.querySelector('.item-quantity');
                 let currentQuantity = parseInt(quantityInput.value);
                 currentQuantity++;
                 quantityInput.value = currentQuantity;
                 
-                // Update total
                 const itemTotal = price * currentQuantity;
                 existingItem.querySelector('.item-total').innerText = itemTotal.toFixed(2);
                 total += price;
                 document.getElementById('total-price').innerText = total.toFixed(2);
             } else {
-                // If product does not exist, add it to the bill
                 const quantity = 1;
                 const itemTotal = price * quantity;
                 total += itemTotal;
@@ -136,65 +172,24 @@ $categories = find_all('categories');
                 billItem.className = 'bill-item';
                 billItem.setAttribute('data-id', id);
                 billItem.innerHTML = `
-                    <td><img src="${imagePath}" alt="${name}" width="50" height="50"> ${name}</td>  <!-- Added image -->
+                    <td><img src="${imagePath}" alt="${name}" width="50" height="50"> ${name}</td>
                     <td>$${price.toFixed(2)}</td>
                     <td><input type="number" class="item-quantity" value="${quantity}" min="1"></td>
                     <td>$<span class="item-total">${itemTotal.toFixed(2)}</span></td>
-                    <td>
-                        <div class="btn-group">
-                            <button class="btn btn-danger btn-sm cancel-item" data-id="${id}" data-price="${itemTotal}">Cancel</button>
-                        </div>
-                    </td>
+                    <td><button class="btn btn-danger btn-sm cancel-item" data-id="${id}" data-price="${itemTotal}">Cancel</button></td>
                 `;
 
                 document.getElementById('bill-items').appendChild(billItem);
-
-                // Event listener for canceling the item
                 billItem.querySelector('.cancel-item').addEventListener('click', function() {
                     const itemPrice = parseFloat(this.getAttribute('data-price'));
                     total -= itemPrice;
                     document.getElementById('total-price').innerText = total.toFixed(2);
-                    billItem.remove(); // Remove the entire bill item
-                });
-
-                // Update total when quantity changes
-                billItem.querySelector('.item-quantity').addEventListener('input', function() {
-                    let currentQuantity = parseInt(this.value);
-                    if (currentQuantity < 1) {
-                        this.value = 1;
-                        currentQuantity = 1;
-                    }
-                    const newItemTotal = price * currentQuantity;
-                    total += price * (currentQuantity - 1); // Adjust total for quantity change
-                    document.getElementById('total-price').innerText = total.toFixed(2);
-                    billItem.querySelector('.item-total').innerText = newItemTotal.toFixed(2);
+                    billItem.remove();
                 });
             }
         });
     });
 
-    // Update change amount based on customer money input
-    document.getElementById('customer-money').addEventListener('input', function() {
-        const customerMoney = parseFloat(this.value);
-        const change = customerMoney - total;
-        document.getElementById('change-amount').innerText = change.toFixed(2);
-    });
-
-    // Checkout functionality
-    document.getElementById('checkout-button').addEventListener('click', function() {
-        const customerMoney = parseFloat(document.getElementById('customer-money').value);
-        if (customerMoney < total) {
-            alert('Insufficient funds!');
-        } else {
-            alert('Transaction successful!');
-            // Reset the bill and total
-            document.getElementById('bill-items').innerHTML = '';
-            total = 0;
-            document.getElementById('total-price').innerText = '0.00';
-            document.getElementById('customer-money').value = '';
-            document.getElementById('change-amount').innerText = '0.00';
-        }
-    });
 </script>
 
 <?php include_once('layouts/footer.php'); ?>
