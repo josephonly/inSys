@@ -17,8 +17,10 @@
   <body>
   <?php  if ($session->isUserLoggedIn(true)): ?>
     <header id="header">
+    
+      <div class="logo pull-left"><img src="/inSys/libs/images/logo.png" alt="Dairy Daily Logo" style="height: 40px; width: 40px; margin-right: 10px;"> Dairy Daily</div>
       
-      <div class="logo pull-left"> Dairy Daily</div>
+
       
       <div class="header-content">
       
