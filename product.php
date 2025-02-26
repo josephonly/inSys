@@ -35,6 +35,7 @@ function get_product_ingredients($product_id) {
                 <th> Product Title </th>
                 <th class="text-center" style="width: 10%;"> Categories </th>
                 <th class="text-center" style="width: 10%;"> Selling Price </th>
+                <th class="text-center" style="width: 20%;"> Ingredients </th> <!-- New Column -->
                 <th class="text-center" style="width: 10%;"> Product Added </th>
                 <th class="text-center" style="width: 100px;"> Actions </th>
               </tr>
@@ -53,6 +54,19 @@ function get_product_ingredients($product_id) {
                 <td> <?php echo remove_junk($product['name']); ?></td>
                 <td class="text-center"> <?php echo remove_junk($product['categorie']); ?></td>
                 <td class="text-center"> <?php echo remove_junk($product['sale_price']); ?></td>
+                <td class="text-center">
+                    <?php
+                    // Fetch ingredients for the product
+                    $ingredients = get_product_ingredients($product['id']);
+                    if ($ingredients->num_rows > 0) {
+                        while ($ingredient = $ingredients->fetch_assoc()) {
+                            echo $ingredient['name'] . ' (' . $ingredient['quantity'] . ' ' . $ingredient['unit'] . ')<br>';
+                        }
+                    } else {
+                        echo 'No ingredients';
+                    }
+                    ?>
+                </td>
                 <td class="text-center"> <?php echo read_date($product['date']); ?></td>
                 <td class="text-center">
                   <div class="btn-group">
