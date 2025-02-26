@@ -112,7 +112,7 @@ if (isset($_POST['add_product'])) {
                         <?php foreach ($all_ingredients as $ingredient) : ?>
                             <div class="input-group mb-2">
                                 <div class="input-group-prepend">
-                                    <span class="input-group-text"><?php echo $ingredient['name']; ?> (Stock: <?php echo $ingredient['stock']; ?>)</span>
+                                    <span class="input-group-text"><?php echo $ingredient['name']; ?> (Stock: <?php echo $ingredient['stock']; ?> <?php echo $ingredient['unit']; ?>)</span>
                                 </div>
                                 <input type="number" class="form-control" name="ingredient-quantities[<?php echo (int)$ingredient['id']; ?>]" placeholder="Quantity (optional)" min="1">
                             </div>
