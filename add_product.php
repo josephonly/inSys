@@ -41,26 +41,22 @@ if (isset($_POST['add_product'])) {
             }
 
             echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        title: 'Success!',
-                        text: 'Product and ingredients recorded successfully!',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    }).then(() => {
-                        window.location = 'add_product.php';
-                    });
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Product and ingredients recorded successfully!',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location = 'add_product.php';
                 });
             </script>";
         } else {
             echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Failed to add product.',
-                        icon: 'error',
-                        confirmButtonText: 'Try Again'
-                    });
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to add product.',
+                    icon: 'error',
+                    confirmButtonText: 'Try Again'
                 });
             </script>";
         }
@@ -71,7 +67,19 @@ if (isset($_POST['add_product'])) {
 <?php include_once('layouts/header.php'); ?>
 
 <div class="row">
-    <div class="col-md-12"><?php echo display_msg($msg); ?></div>
+    <div class="col-md-12">
+        <?php if (isset($_SESSION['msg'])) : ?>
+            <script>
+                Swal.fire({
+                    title: "<?php echo $_SESSION['msg_type'] == 'success' ? 'Success!' : 'Error!'; ?>",
+                    text: "<?php echo $_SESSION['msg']; ?>",
+                    icon: "<?php echo $_SESSION['msg_type']; ?>",
+                    confirmButtonText: 'OK'
+                });
+            </script>
+            <?php unset($_SESSION['msg'], $_SESSION['msg_type']); ?>
+        <?php endif; ?>
+    </div>
 </div>
 
 <div class="row">
@@ -108,7 +116,6 @@ if (isset($_POST['add_product'])) {
                         <input type="number" class="form-control" name="saleing-price" placeholder="Selling Price" required>
                     </div>
 
-                    <!-- Ingredients Selection (Optional Quantity) -->
                     <div class="form-group">
                         <label>Select Ingredients & Quantity (Optional)</label>
                         <?php foreach ($all_ingredients as $ingredient) : ?>
@@ -130,5 +137,5 @@ if (isset($_POST['add_product'])) {
 
 <?php include_once('layouts/footer.php'); ?>
 
-<!-- Include SweetAlert -->
+<!-- ✅ Include SweetAlert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
