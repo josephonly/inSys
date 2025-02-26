@@ -33,35 +33,24 @@ if (isset($_POST['add_product'])) {
                     $ingredient_id = (int)$ingredient_id;
                     $quantity = (int)$quantity;
 
-                    // Process only if quantity is greater than 0
                     if ($quantity > 0) {
-                        // Insert into product_ingredients table (Record Only)
                         $db->query("INSERT INTO product_ingredients (product_id, ingredient_id, quantity) 
                                     VALUES ('{$product_id}', '{$ingredient_id}', '{$quantity}')");
                     }
                 }
             }
 
-            echo "<script>
-                Swal.fire({
-                    title: 'Success!',
-                    text: 'Product and ingredients recorded successfully!',
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    window.location = 'add_product.php';
-                });
-            </script>";
+            // ✅ Store success message in session and redirect
+            $_SESSION['msg_type'] = 'success';
+            $_SESSION['msg'] = 'Product and ingredients recorded successfully!';
         } else {
-            echo "<script>
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Failed to add product.',
-                    icon: 'error',
-                    confirmButtonText: 'Try Again'
-                });
-            </script>";
+            // ✅ Store error message in session and redirect
+            $_SESSION['msg_type'] = 'error';
+            $_SESSION['msg'] = 'Failed to add product!';
         }
+        
+        header("Location: add_product.php"); // Redirect to avoid form resubmission
+        exit();
     }
 }
 ?>
@@ -69,7 +58,19 @@ if (isset($_POST['add_product'])) {
 <?php include_once('layouts/header.php'); ?>
 
 <div class="row">
-    <div class="col-md-12"><?php echo display_msg($msg); ?></div>
+    <div class="col-md-12">
+        <?php if (isset($_SESSION['msg'])) : ?>
+            <script>
+                Swal.fire({
+                    title: "<?php echo $_SESSION['msg_type'] == 'success' ? 'Success!' : 'Error!'; ?>",
+                    text: "<?php echo $_SESSION['msg']; ?>",
+                    icon: "<?php echo $_SESSION['msg_type']; ?>",
+                    confirmButtonText: 'OK'
+                });
+            </script>
+            <?php unset($_SESSION['msg'], $_SESSION['msg_type']); ?>
+        <?php endif; ?>
+    </div>
 </div>
 
 <div class="row">
@@ -106,7 +107,6 @@ if (isset($_POST['add_product'])) {
                         <input type="number" class="form-control" name="saleing-price" placeholder="Selling Price" required>
                     </div>
 
-                    <!-- Ingredients Selection (Optional Quantity) -->
                     <div class="form-group">
                         <label>Select Ingredients & Quantity (Optional)</label>
                         <?php foreach ($all_ingredients as $ingredient) : ?>
@@ -128,5 +128,5 @@ if (isset($_POST['add_product'])) {
 
 <?php include_once('layouts/footer.php'); ?>
 
-<!-- Include SweetAlert -->
+<!-- ✅ Include SweetAlert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
