@@ -33,9 +33,7 @@ if (isset($_POST['add_product'])) {
                     $ingredient_id = (int)$ingredient_id;
                     $quantity = (int)$quantity;
 
-                    // Process only if quantity is greater than 0
                     if ($quantity > 0) {
-                        // Insert into product_ingredients table (Record Only)
                         $db->query("INSERT INTO product_ingredients (product_id, ingredient_id, quantity) 
                                     VALUES ('{$product_id}', '{$ingredient_id}', '{$quantity}')");
                     }
@@ -43,22 +41,26 @@ if (isset($_POST['add_product'])) {
             }
 
             echo "<script>
-                Swal.fire({
-                    title: 'Success!',
-                    text: 'Product and ingredients recorded successfully!',
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    window.location = 'add_product.php';
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Product and ingredients recorded successfully!',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location = 'add_product.php';
+                    });
                 });
             </script>";
         } else {
             echo "<script>
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Failed to add product.',
-                    icon: 'error',
-                    confirmButtonText: 'Try Again'
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to add product.',
+                        icon: 'error',
+                        confirmButtonText: 'Try Again'
+                    });
                 });
             </script>";
         }
