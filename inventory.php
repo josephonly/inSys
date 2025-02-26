@@ -49,19 +49,28 @@ if (isset($_POST['restock_ingredient'])) {
     $i_unit = (string) $_POST['ingredient-unit'];
 
     if ($i_id && $i_stock > 0) {
-        if ($i_unit == 'grams' || $i_unit == 'milliliters') {
-            $f_stock = $i_stock / 1000;
-            $query = "UPDATE ingredients SET stock = stock + {$f_stock} WHERE id = '{$i_id}'";
-            if ($db->query($query)) {
-                $session->msg('s', "Ingredient restocked successfully!");
-                redirect('inventory.php', false);
-            } else {
-                $session->msg('d', 'Failed to restock ingredient.');
-                redirect('inventory.php', false);
-            }
+        // Convert grams and milliliters to kilograms and liters respectively
+        if ($i_unit == 'grams') {
+            $f_stock = $i_stock / 1000; // Convert grams to kilograms
+        } elseif ($i_unit == 'milliliters') {
+            $f_stock = $i_stock / 1000; // Convert milliliters to liters
+        } else {
+            // Keep the stock unchanged for kilograms, liters, and pieces
+            $f_stock = $i_stock;
+        }
+
+        // Update the ingredient stock
+        $query = "UPDATE ingredients SET stock = stock + {$f_stock} WHERE id = '{$i_id}'";
+        if ($db->query($query)) {
+            $session->msg('s', "Ingredient restocked successfully!");
+            redirect('inventory.php', false);
+        } else {
+            $session->msg('d', 'Failed to restock ingredient.');
+            redirect('inventory.php', false);
         }
     }
 }
+
 ?>
 <?php include_once('layouts/header.php'); ?>
 
