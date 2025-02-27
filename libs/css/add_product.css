@@ -1,0 +1,115 @@
+/* General Page Styling */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Panel Styling */
+.panel {
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.panel-heading {
+    background-color: #f6fdf9;
+    color: #28a745;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.panel-heading i {
+    font-size: 20px;
+}
+
+.panel-body {
+    padding: 20px;
+}
+
+/* Form Styling */
+.form-group {
+    margin-bottom: 15px;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    background-color: #f8f9fa;
+    transition: 0.3s;
+}
+
+input:focus,
+select:focus {
+    border-color: #28a745;
+    outline: none;
+    box-shadow: 0px 0px 5px rgba(40, 167, 69, 0.5);
+}
+
+/* Button Styling */
+.btn-success {
+    background-color: #28a745;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 50px;
+    cursor: pointer;
+    color: white;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-success i {
+    font-size: 18px;
+}
+
+/* Ingredients Section */
+.input-group {
+    display: flex;
+    align-items: center;
+    background: #f6fdf9;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    transition: 0.3s;
+}
+
+.input-group:hover {
+    background: #e9f7f1;
+}
+
+.input-group-prepend {
+    color: #28a745;
+    font-weight: bold;
+    min-width: 180px;
+}
+
+.input-group-text {
+    font-size: 14px;
+}
+
+/* SweetAlert Custom Styling */
+.swal2-popup {
+    font-size: 16px !important;
+}

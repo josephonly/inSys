@@ -70,6 +70,9 @@ if (isset($_POST['add_product'])) {
 
 <?php include_once('layouts/header.php'); ?>
 
+<!-- Link to External CSS -->
+<link rel="stylesheet" href="libs/css/add_product.css">
+
 <div class="row">
     <div class="col-md-12"><?php echo display_msg($msg); ?></div>
 </div>
