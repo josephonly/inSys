@@ -213,7 +213,7 @@ function tableExists($table){
     $query = "SELECT p.id, p.name, p.sale_price, p.date, c.name AS categorie, m.file_name AS image
               FROM products p
               LEFT JOIN categories c ON p.categorie_id = c.id
-              LEFT JOIN media m ON p.media_id = m.id";
+              LEFT JOIN media m ON p. media_id = m.id";
     return find_by_sql($query);
 }
   /*--------------------------------------------------------------*/
