@@ -56,7 +56,7 @@ if (isset($_POST['restock_ingredient'])) {
     <div class="col-md-8">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <strong><span class="glyphicon glyphicon-list"></span> Ingredient Inventor
+                <strong><span class="glyphicon glyphicon-list"></span> Ingredient Inventory
             </strong>
             </div>
             <div class="panel-body">
